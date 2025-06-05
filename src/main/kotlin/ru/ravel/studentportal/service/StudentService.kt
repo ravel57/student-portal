@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import ru.ravel.studentportal.dto.MarkEntry
 import ru.ravel.studentportal.model.*
+import ru.ravel.studentportal.repository.GroupRepository
 import ru.ravel.studentportal.repository.SubjectRepository
 import ru.ravel.studentportal.repository.UserRepository
 import java.time.ZonedDateTime
@@ -12,7 +13,8 @@ import java.time.ZonedDateTime
 @Service
 class StudentService(
 	private val userRepository: UserRepository,
-	private val subjectRepository: SubjectRepository
+	private val subjectRepository: SubjectRepository,
+	private val groupRepository: GroupRepository,
 ) {
 
 	fun getStudents(/*subject: Subject*/): List<User> {
@@ -48,6 +50,10 @@ class StudentService(
 	fun studentMarks(authentication: Authentication): List<StudentsMarks>? {
 		val student = userRepository.findByEmail(authentication.name)
 		return student?.studentsMarks
+	}
+
+	fun getGroups(): List<StudentGroup> {
+		return groupRepository.findAll()
 	}
 
 }

@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import ru.ravel.studentportal.dto.MarkEntry
-import ru.ravel.studentportal.model.Subject
 import ru.ravel.studentportal.service.StudentService
 import ru.ravel.studentportal.service.SubjectService
 
@@ -15,6 +14,14 @@ class ApiController(
 	private val studentService: StudentService,
 	private val subjectService: SubjectService
 ) {
+
+	@GetMapping("/groups")
+	fun getGroups(
+
+	): ResponseEntity<Any> {
+		return ResponseEntity.ok().body(studentService.getGroups())
+	}
+
 
 	@GetMapping("/students")
 	fun getStudents(

@@ -7,4 +7,7 @@ VALUES (DEFAULT, 'admin', 'admin', 'admin@studentportal.ru', '$2a$12$2NPcg3T3Xsn
 
 INSERT INTO public.subject (id, name, teacher_id)
 VALUES (DEFAULT, 'Математика', 2),
-       (DEFAULT, 'Информатика', 2)
+       (DEFAULT, 'Информатика', 2);
+
+INSERT INTO public.student_group(id, name)
+VALUES (DEFAULT, 'ИС2-21');

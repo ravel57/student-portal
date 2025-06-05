@@ -88,7 +88,7 @@ class WebSecurityConfig(
 					.loginPage("/login")
 					.loginProcessingUrl("/perform_login")
 					.failureUrl("/login?error=true")
-					.successForwardUrl("/dashboard")
+					.defaultSuccessUrl("/dashboard", true)
 					.permitAll()
 			}
 			.logout { logout ->
