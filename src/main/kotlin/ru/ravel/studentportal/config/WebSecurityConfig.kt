@@ -76,11 +76,7 @@ class WebSecurityConfig(
 				csrf
 					.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 					.ignoringRequestMatchers("/api/**")
-//				    .disable()
 			}
-//			.cors { cors ->
-//				cors.disable()
-//			}
 			.authorizeHttpRequests { requests ->
 				requests
 					.requestMatchers("/js/**", "/css/**", "/icons/**", "/fonts/**").permitAll()
@@ -92,6 +88,7 @@ class WebSecurityConfig(
 					.loginPage("/login")
 					.loginProcessingUrl("/perform_login")
 					.failureUrl("/login?error=true")
+					.successForwardUrl("/dashboard")
 					.permitAll()
 			}
 			.logout { logout ->

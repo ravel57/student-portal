@@ -1,6 +1,6 @@
 package ru.ravel.studentportal.model
 
-enum class DisciplineType {
+enum class SubjectType {
 	EXAM,
 	TEST,
 	DZ,

@@ -1,5 +1,7 @@
 package ru.ravel.studentportal.model
 
+import com.fasterxml.jackson.annotation.JsonManagedReference
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 
 
@@ -9,10 +11,15 @@ data class StudentsMarks(
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	var id: Long? = null,
 
-	@OneToOne(cascade = [(CascadeType.ALL)], fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER, cascade = [(CascadeType.ALL)])
+	@JsonBackReference("student-marks")
 	var student: User? = null,
 
+	@ManyToOne(fetch = FetchType.EAGER, cascade = [(CascadeType.ALL)])
+	@JsonBackReference("subject-marks")
+	var subject: Subject? = null,
+
 	@OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name = "students_marks_id")
+	@JsonManagedReference("marks-list")
 	var marks: MutableList<Mark> = mutableListOf()
 )

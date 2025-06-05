@@ -1,10 +1,7 @@
 package ru.ravel.studentportal.model
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
+import java.time.ZonedDateTime
 
 
 @Entity
@@ -14,8 +11,10 @@ data class Mark(
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	var id: Long? = null,
 
-	@ManyToOne
-	var discipline: Discipline? = null,
+	@ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+	var subject: Subject? = null,
 
 	var value: Int? = null,
+
+	var date: ZonedDateTime? = null,
 )

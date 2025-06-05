@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 internal class MvcConfig : WebMvcConfigurer {
 	override fun addViewControllers(registry: ViewControllerRegistry) {
 		registry.addViewController("/login").setViewName("index")
-		registry.addViewController("/portal").setViewName("index")
+		registry.addViewController("/dashboard").setViewName("index")
 	}
 
 

@@ -3,9 +3,8 @@ package ru.ravel.studentportal.model
 import org.springframework.security.core.GrantedAuthority
 
 enum class Role : GrantedAuthority {
-	USER,
+	STUDENT,
 	TEACHER,
-	CURATOR,
 	ADMIN,
 	;
 

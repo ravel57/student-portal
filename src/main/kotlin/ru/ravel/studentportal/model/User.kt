@@ -1,14 +1,16 @@
 package ru.ravel.studentportal.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonManagedReference
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 import org.springframework.security.core.userdetails.UserDetails
+import java.io.Serializable
 
 
 @Entity
 @Table(name = "user_t")
 class User(
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	var id: Long? = null,
@@ -19,25 +21,36 @@ class User(
 	@JsonIgnore
 	private var password: String? = null,
 
-	@ElementCollection(fetch = FetchType.EAGER, targetClass = Role::class)
 	@Enumerated(EnumType.STRING)
-	@CollectionTable(name = "user_authorities", joinColumns = [JoinColumn(name = "user_id")])
-	@Column(name = "authorities")
-	var roles: List<Role> = mutableListOf(),
+	var role: Role? = null,
 
 	var firstname: String? = null,
 
 	var lastname: String? = null,
-) : UserDetails {
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+	@JsonBackReference("user-group")
+	var group: StudentGroup? = null,
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+	@JoinColumn(name = "student_id")
+	@JsonManagedReference("student-marks")
+	var studentsMarks: MutableList<StudentsMarks> = mutableListOf()
+) : UserDetails, Serializable {
+
+	companion object {
+		private val serialVersionUID = 354684123987534117L
+	}
 
 	override fun getAuthorities(): List<Role> {
-		return roles
+		return listOf(role!!)
 	}
 
 
 	override fun getPassword(): String {
 		return password ?: throw RuntimeException("Password is null")
 	}
+
 
 	override fun getUsername(): String {
 		return email ?: throw RuntimeException("Email is null")
@@ -51,4 +64,5 @@ class User(
 			throw RuntimeException("Password is empty")
 		}
 	}
+
 }
