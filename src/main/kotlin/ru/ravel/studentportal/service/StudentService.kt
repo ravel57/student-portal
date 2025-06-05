@@ -17,10 +17,10 @@ class StudentService(
 	private val groupRepository: GroupRepository,
 ) {
 
-	fun getStudents(/*subject: Subject*/): List<User> {
+	fun getStudents(group: StudentGroup): List<User> {
 		return userRepository.findAll()
 			.filter { it.role == Role.STUDENT }
-//			.filter { it.group?.subjects?.contains(subject) == true }
+			.filter { it.group == group }
 	}
 
 

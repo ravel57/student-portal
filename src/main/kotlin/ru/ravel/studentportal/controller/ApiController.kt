@@ -20,19 +20,19 @@ class ApiController(
 	fun getGroups(
 		authentication: Authentication,
 	): ResponseEntity<Any> {
-		try {
-			return ResponseEntity.ok().body(studentService.getGroups(authentication))
+		return try {
+			ResponseEntity.ok().body(studentService.getGroups(authentication))
 		} catch (e: Exception) {
-			return ResponseEntity.badRequest().body(e.message)
+			ResponseEntity.badRequest().body(e.message)
 		}
 	}
 
 
-	@GetMapping("/students")
+	@PostMapping("/students")
 	fun getStudents(
 		@RequestBody group: StudentGroup,
 	): ResponseEntity<Any> {
-		return ResponseEntity.ok().body(studentService.getStudents(/*subject*/))
+		return ResponseEntity.ok().body(studentService.getStudents(group))
 	}
 
 
