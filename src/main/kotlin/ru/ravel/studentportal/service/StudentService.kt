@@ -52,8 +52,14 @@ class StudentService(
 		return student?.studentsMarks
 	}
 
-	fun getGroups(): List<StudentGroup> {
-		return groupRepository.findAll()
+	fun getGroups(authentication: Authentication): List<StudentGroup> {
+		val principal = authentication.principal as? User
+		val user = userRepository.findByEmail(principal?.username ?: "")!!
+		if (user.role == Role.TEACHER || user.role == Role.ADMIN) {
+			return groupRepository.findAll()
+		} else {
+			throw RuntimeException("user not teacher or admin")
+		}
 	}
 
 }

@@ -10,4 +10,6 @@ VALUES (DEFAULT, 'Математика', 2),
        (DEFAULT, 'Информатика', 2);
 
 INSERT INTO public.student_group(id, name)
-VALUES (DEFAULT, 'ИС2-21');
+VALUES (DEFAULT, 'ИС2-21'),
+       (DEFAULT, 'П2-21'),
+       (DEFAULT, 'БТС1-21');
