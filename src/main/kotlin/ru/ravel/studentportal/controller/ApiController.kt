@@ -3,8 +3,8 @@ package ru.ravel.studentportal.controller
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
+import ru.ravel.studentportal.dto.GroupId
 import ru.ravel.studentportal.dto.MarkEntry
-import ru.ravel.studentportal.model.StudentGroup
 import ru.ravel.studentportal.service.StudentService
 import ru.ravel.studentportal.service.SubjectService
 
@@ -30,9 +30,9 @@ class ApiController(
 
 	@PostMapping("/students")
 	fun getStudents(
-		@RequestBody group: StudentGroup,
+		@RequestBody groupId: GroupId,
 	): ResponseEntity<Any> {
-		return ResponseEntity.ok().body(studentService.getStudents(group))
+		return ResponseEntity.ok().body(studentService.getStudents(groupId))
 	}
 
 

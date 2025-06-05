@@ -2,6 +2,7 @@ package ru.ravel.studentportal.service
 
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
+import ru.ravel.studentportal.dto.GroupId
 import ru.ravel.studentportal.dto.MarkEntry
 import ru.ravel.studentportal.model.*
 import ru.ravel.studentportal.repository.GroupRepository
@@ -17,10 +18,10 @@ class StudentService(
 	private val groupRepository: GroupRepository,
 ) {
 
-	fun getStudents(group: StudentGroup): List<User> {
+	fun getStudents(groupId: GroupId): List<User> {
 		return userRepository.findAll()
 			.filter { it.role == Role.STUDENT }
-			.filter { it.group == group }
+			.filter { it.group?.id == groupId.id }
 	}
 
 
