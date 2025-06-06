@@ -60,16 +60,14 @@ class StudentService(
 	}
 
 
-//	fun getStudentsMarks(groupId: String): List<StudentsMarks> {
-//		return userRepository.findByGroupId(groupId = groupId.toLong())
-//			.filter { it.role == Role.STUDENT }
-//			.flatMap { it.studentsMarks }
-//	}
-
-
 	fun setStudentMarks(authentication: Authentication): List<StudentsMarks>? {
 		val student = userRepository.findByEmail(authentication.name)
 		return student?.studentsMarks
+	}
+
+	fun getStudentInfo(authentication: Authentication): User? {
+		val principal = authentication.principal as? User
+		return userRepository.findByEmail(principal?.username ?: "")
 	}
 
 }

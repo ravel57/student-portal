@@ -27,6 +27,17 @@ class ApiController(
 		}
 	}
 
+	@GetMapping("/me")
+	fun getStudentInfo(
+		authentication: Authentication,
+	): ResponseEntity<Any> {
+		return try {
+			ResponseEntity.ok().body(studentService.getStudentInfo(authentication))
+		} catch (e: Exception) {
+			ResponseEntity.badRequest().body(e.message)
+		}
+	}
+
 
 	@PostMapping("/students")
 	fun getStudents(
