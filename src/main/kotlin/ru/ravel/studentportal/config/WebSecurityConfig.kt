@@ -1,6 +1,7 @@
 package ru.ravel.studentportal.config
 
 
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -42,6 +43,7 @@ class WebSecurityConfig(
 		return DaoAuthenticationProvider().apply {
 			setUserDetailsService(userDetailsService)
 			setPasswordEncoder(passwordEncoder)
+			setHideUserNotFoundExceptions(false)
 		}
 	}
 
@@ -92,7 +94,8 @@ class WebSecurityConfig(
 					.permitAll()
 			}
 			.logout { logout ->
-				logout.logoutSuccessUrl("/login?logout=true")
+				logout
+					.logoutSuccessUrl("/login?logout=true")
 					.invalidateHttpSession(true)
 					.deleteCookies("JSESSIONID")
 					.permitAll()

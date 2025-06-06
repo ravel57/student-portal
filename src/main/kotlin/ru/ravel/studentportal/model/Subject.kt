@@ -2,6 +2,7 @@ package ru.ravel.studentportal.model
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
+import java.io.Serializable
 
 
 @Entity
@@ -16,4 +17,8 @@ data class Subject(
 	@ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
 	@JsonBackReference("teacher-subjects")
 	var teacher: User? = null,
-)
+) : Serializable {
+	companion object {
+		private const val serialVersionUID = 132746514894581436L
+	}
+}

@@ -28,7 +28,8 @@ class User(
 
 	var lastname: String? = null,
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "group_id")
 	@JsonBackReference("user-group")
 	var group: StudentGroup? = null,
 

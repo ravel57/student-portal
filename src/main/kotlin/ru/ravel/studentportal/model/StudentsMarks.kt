@@ -3,6 +3,7 @@ package ru.ravel.studentportal.model
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
+import java.io.Serializable
 
 
 @Entity
@@ -22,4 +23,8 @@ data class StudentsMarks(
 	@OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
 	@JsonManagedReference("marks-list")
 	var marks: MutableList<Mark> = mutableListOf()
-)
+) : Serializable {
+	companion object {
+		private const val serialVersionUID = 4561278914621L
+	}
+}

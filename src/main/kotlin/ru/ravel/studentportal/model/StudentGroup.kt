@@ -2,6 +2,7 @@ package ru.ravel.studentportal.model
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
+import java.io.Serializable
 
 
 @Entity
@@ -13,7 +14,7 @@ data class StudentGroup(
 	var name: String? = null,
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = [(CascadeType.ALL)])
-	@JoinColumn(name = "group_id")
+	@JoinColumn(name = "group_id", referencedColumnName = "id")
 	@JsonManagedReference
 	var students: MutableList<User> = mutableListOf(),
 
@@ -21,4 +22,8 @@ data class StudentGroup(
 	@JoinColumn(name = "teacher_id")
 	@JsonManagedReference("teacher-subjects")
 	var subjects: MutableList<Subject> = mutableListOf(),
-)
+) : Serializable {
+	companion object {
+		private const val serialVersionUID = 68127231473987L
+	}
+}

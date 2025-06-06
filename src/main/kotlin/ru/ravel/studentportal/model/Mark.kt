@@ -1,6 +1,7 @@
 package ru.ravel.studentportal.model
 
 import jakarta.persistence.*
+import java.io.Serializable
 import java.time.LocalDate
 
 
@@ -17,4 +18,8 @@ data class Mark(
 	var value: Int? = null,
 
 	var date: LocalDate? = null,
-)
+) : Serializable {
+	companion object {
+		private const val serialVersionUID = 1L
+	}
+}
