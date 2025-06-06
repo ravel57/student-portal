@@ -19,48 +19,6 @@ class StudentService(
 	private val groupRepository: GroupRepository,
 ) {
 
-	fun getStudents(groupId: GroupId): List<User> {
-		return userRepository.findByGroupId(groupId.id)
-			.filter { it.role == Role.STUDENT }
-	}
-
-
-	fun setMark(markEntry: MarkEntry): User? {
-		val student = userRepository.findById(markEntry.studentId).orElseThrow()
-		val subject = subjectRepository.findById(markEntry.subjectId).orElseThrow()
-		var studentMark = student?.studentsMarks?.find { it.subject?.name == subject?.name }
-		val mark = Mark(
-			subject = subject,
-			value = markEntry.mark,
-			date = LocalDate.parse(markEntry.date, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-		)
-		if (studentMark == null) {
-			studentMark = StudentsMarks(
-				student = student,
-				subject = subject,
-				marks = mutableListOf(mark),
-			)
-			student?.studentsMarks = mutableListOf(studentMark)
-		} else {
-			studentMark.marks.add(mark)
-		}
-		student?.let { userRepository.save(it) }
-		return student
-	}
-
-	fun getStudentsMarks(groupId: String): List<StudentsMarks> {
-		return userRepository.findByGroupId(groupId = groupId.toLong())
-			.filter { it.role == Role.STUDENT }
-			.flatMap { it.studentsMarks }
-	}
-
-
-	fun setStudentMarks(authentication: Authentication): List<StudentsMarks>? {
-		val student = userRepository.findByEmail(authentication.name)
-		return student?.studentsMarks
-	}
-
-
 	fun getGroups(authentication: Authentication): List<StudentGroup> {
 		val principal = authentication.principal as? User
 		val user = userRepository.findByEmail(principal?.username ?: "")!!
@@ -69,6 +27,49 @@ class StudentService(
 		} else {
 			throw RuntimeException("user not teacher or admin")
 		}
+	}
+
+
+	fun getStudents(groupId: GroupId): List<User> {
+		return userRepository.findByGroupId(groupId.id)
+			.filter { it.role == Role.STUDENT }
+	}
+
+
+	fun updateMark(markEntry: MarkEntry): User? {
+		val student = userRepository.findById(markEntry.studentId).orElseThrow()
+		val subject = subjectRepository.findById(markEntry.subjectId).orElseThrow()
+		var studentMark = student?.studentsMarks?.find { it.subject?.name == subject?.name }
+		val mark = Mark(
+			subject = subject,
+			value = markEntry.mark,
+			date = LocalDate.parse(markEntry.date, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+		)
+		if (studentMark != null) {
+			studentMark.marks.add(mark)
+		} else {
+			studentMark = StudentsMarks(
+				student = student,
+				subject = subject,
+				marks = mutableListOf(mark),
+			)
+			student?.studentsMarks = mutableListOf(studentMark)
+		}
+		student?.let { userRepository.save(it) }
+		return student
+	}
+
+
+//	fun getStudentsMarks(groupId: String): List<StudentsMarks> {
+//		return userRepository.findByGroupId(groupId = groupId.toLong())
+//			.filter { it.role == Role.STUDENT }
+//			.flatMap { it.studentsMarks }
+//	}
+
+
+	fun setStudentMarks(authentication: Authentication): List<StudentsMarks>? {
+		val student = userRepository.findByEmail(authentication.name)
+		return student?.studentsMarks
 	}
 
 }

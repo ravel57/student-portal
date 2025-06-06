@@ -44,22 +44,13 @@ class ApiController(
 	}
 
 
-	@GetMapping("/students-marks")
-	fun getStudentsMarks(
-		authentication: Authentication,
-		@RequestParam groupId: String,
-	): ResponseEntity<Any> {
-		return ResponseEntity.ok().body(studentService.getStudentsMarks(groupId))
-	}
-
-
 	@PostMapping("/update-mark")
 	fun updateMark(
 		authentication: Authentication,
 		@RequestBody markEntry: MarkEntry
 	): ResponseEntity<Any> {
 		return try {
-			ResponseEntity.ok().body(studentService.setMark(markEntry))
+			ResponseEntity.ok().body(studentService.updateMark(markEntry))
 		} catch (e: Exception) {
 			ResponseEntity.badRequest().body(e.message)
 		}
