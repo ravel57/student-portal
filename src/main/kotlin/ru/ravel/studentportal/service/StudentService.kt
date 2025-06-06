@@ -9,6 +9,7 @@ import ru.ravel.studentportal.repository.GroupRepository
 import ru.ravel.studentportal.repository.SubjectRepository
 import ru.ravel.studentportal.repository.UserRepository
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 @Service
@@ -25,13 +26,13 @@ class StudentService(
 
 
 	fun setMark(markEntry: MarkEntry): User? {
-		val student = userRepository.findAll().find { it.id == markEntry.studentId }
+		val student = userRepository.findById(markEntry.studentId).orElseThrow()
 		val subject = subjectRepository.findById(markEntry.subjectId).orElseThrow()
 		var studentMark = student?.studentsMarks?.find { it.subject?.name == subject?.name }
 		val mark = Mark(
 			subject = subject,
 			value = markEntry.mark,
-			date = LocalDate.now() //FIXME дата должна прилетать с фронта
+			date = LocalDate.parse(markEntry.date, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
 		)
 		if (studentMark == null) {
 			studentMark = StudentsMarks(
@@ -48,7 +49,6 @@ class StudentService(
 	}
 
 	fun getStudentsMarks(groupId: String): List<StudentsMarks> {
-//		val localDate = LocalDate.parse(studentsMarksDto.date, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
 		return userRepository.findByGroupId(groupId = groupId.toLong())
 			.filter { it.role == Role.STUDENT }
 			.flatMap { it.studentsMarks }
