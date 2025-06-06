@@ -7,4 +7,6 @@ interface UserRepository : JpaRepository<User, Long> {
 
 	fun findByEmail(username: String) : User?
 
+	fun findByGroupId(groupId: Long) : List<User>
+
 }

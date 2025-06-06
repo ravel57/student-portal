@@ -8,7 +8,7 @@ import ru.ravel.studentportal.model.*
 import ru.ravel.studentportal.repository.GroupRepository
 import ru.ravel.studentportal.repository.SubjectRepository
 import ru.ravel.studentportal.repository.UserRepository
-import java.time.ZonedDateTime
+import java.time.LocalDate
 
 
 @Service
@@ -19,20 +19,19 @@ class StudentService(
 ) {
 
 	fun getStudents(groupId: GroupId): List<User> {
-		return userRepository.findAll()
+		return userRepository.findByGroupId(groupId.id)
 			.filter { it.role == Role.STUDENT }
-			.filter { it.group?.id == groupId.id }
 	}
 
 
 	fun setMark(markEntry: MarkEntry): User? {
 		val student = userRepository.findAll().find { it.id == markEntry.studentId }
-		val subject = subjectRepository.findByName(markEntry.subject)
+		val subject = subjectRepository.findById(markEntry.subjectId).orElseThrow()
 		var studentMark = student?.studentsMarks?.find { it.subject?.name == subject?.name }
 		val mark = Mark(
 			subject = subject,
 			value = markEntry.mark,
-			date = ZonedDateTime.now()
+			date = LocalDate.now() //FIXME дата должна прилетать с фронта
 		)
 		if (studentMark == null) {
 			studentMark = StudentsMarks(
@@ -48,10 +47,19 @@ class StudentService(
 		return student
 	}
 
-	fun studentMarks(authentication: Authentication): List<StudentsMarks>? {
+	fun getStudentsMarks(groupId: String): List<StudentsMarks> {
+//		val localDate = LocalDate.parse(studentsMarksDto.date, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+		return userRepository.findByGroupId(groupId = groupId.toLong())
+			.filter { it.role == Role.STUDENT }
+			.flatMap { it.studentsMarks }
+	}
+
+
+	fun setStudentMarks(authentication: Authentication): List<StudentsMarks>? {
 		val student = userRepository.findByEmail(authentication.name)
 		return student?.studentsMarks
 	}
+
 
 	fun getGroups(authentication: Authentication): List<StudentGroup> {
 		val principal = authentication.principal as? User

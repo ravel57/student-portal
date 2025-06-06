@@ -1,7 +1,7 @@
 package ru.ravel.studentportal.model
 
 import jakarta.persistence.*
-import java.time.ZonedDateTime
+import java.time.LocalDate
 
 
 @Entity
@@ -16,5 +16,5 @@ data class Mark(
 
 	var value: Int? = null,
 
-	var date: ZonedDateTime? = null,
+	var date: LocalDate? = null,
 )
