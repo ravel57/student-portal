@@ -78,6 +78,7 @@ class WebSecurityConfig(
 				csrf
 					.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 					.ignoringRequestMatchers("/api/**")
+					.ignoringRequestMatchers("/logout")
 			}
 			.authorizeHttpRequests { requests ->
 				requests
