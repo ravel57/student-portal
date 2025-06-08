@@ -34,7 +34,7 @@ class LessonService(
 	fun getLessonsBy(lessonBy: LessonBy): List<Lesson> {
 		return lessonRepository.findAll()
 			.filter { it.group?.id == lessonBy.groupId }
-			.filter { it.group?.id == lessonBy.subjectId }
+			.filter { it.subject?.id == lessonBy.subjectId }
 			.sortedBy { it.date }
 	}
 

@@ -66,36 +66,33 @@ class StudentService(
 		return student?.studentsMarks
 	}
 
+
 	fun getStudentInfo(authentication: Authentication): User? {
 		val principal = authentication.principal as? User
 		return userRepository.findByEmail(principal?.username ?: "")
 	}
 
-	fun getStudentsMarksBySubjects(studentId: Long): StudentsMarksBySubjects? {
+
+	fun getStudentsMarksBySubjects(studentId: Long): List<MarksBySubject?> {
 		val student = userRepository.findById(studentId).orElseThrow()
 		val lessons = lessonRepository.findAll().filter { it.group == student.group }
-		val list = student.studentsMarks
-			.map { studentMark ->
-				val marks = lessons
-					.filter { it.subject == studentMark.subject }
-					.flatMap { lesson ->
-						studentMark.marks.map {
-							MarkDto(
-								lesson.date!!,
-								studentMark.marks.find { it.date == lesson.date }?.value
-							)
-						}
-					}
+		val result = lessons
+			.groupBy { it.subject }
+			.map { (subject, subjectLessons) ->
+				val studentsMarks = student.studentsMarks.find { it.subject == subject }
+				val marks = subjectLessons.map { lesson ->
+					val mark = studentsMarks?.marks?.find { it.date == lesson.date }?.value
+					MarkDto(
+						date = lesson.date ?: error("Урок без даты"),
+						mark = mark
+					)
+				}
 				MarksBySubject(
+					subject = subject ?: error("Lesson без subject"),
 					marks = marks
-					/*studentMark.marks.sortedBy { it.date }*/,
-					subject = studentMark.subject!!
 				)
 			}
-		return StudentsMarksBySubjects(
-			student = student,
-			marksBySubject = list
-		)
+		return result
 	}
 
 }
