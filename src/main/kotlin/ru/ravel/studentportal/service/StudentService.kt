@@ -4,6 +4,8 @@ import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import ru.ravel.studentportal.dto.GroupId
 import ru.ravel.studentportal.dto.MarkEntry
+import ru.ravel.studentportal.dto.MarksBySubject
+import ru.ravel.studentportal.dto.StudentsMarksBySubjects
 import ru.ravel.studentportal.model.*
 import ru.ravel.studentportal.repository.GroupRepository
 import ru.ravel.studentportal.repository.SubjectRepository
@@ -68,6 +70,17 @@ class StudentService(
 	fun getStudentInfo(authentication: Authentication): User? {
 		val principal = authentication.principal as? User
 		return userRepository.findByEmail(principal?.username ?: "")
+	}
+
+	fun getStudentsMarksBySubjects(studentId: Long): StudentsMarksBySubjects? {
+		val student = userRepository.findById(studentId).orElseThrow()
+		val list = student.studentsMarks.map { studentMark ->
+			MarksBySubject(studentMark.marks, studentMark.subject!!)
+		}
+		return StudentsMarksBySubjects(
+			student = student,
+			marksBySubject = list
+		)
 	}
 
 }

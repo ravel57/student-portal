@@ -100,4 +100,10 @@ class ApiController(
 		return ResponseEntity.ok().body(lessonService.getLessonsBy(lessonBy))
 	}
 
+
+	@GetMapping("/students-marks-by-subjects")
+	fun getStudentsMarksBySubjects(@RequestParam studentId: Long): ResponseEntity<Any> {
+		return ResponseEntity.ok().body(studentService.getStudentsMarksBySubjects(studentId))
+	}
+
 }
