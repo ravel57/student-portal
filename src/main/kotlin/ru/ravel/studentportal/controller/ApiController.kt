@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*
 import ru.ravel.studentportal.dto.GroupId
 import ru.ravel.studentportal.dto.LessonDto
 import ru.ravel.studentportal.dto.MarkEntry
-import ru.ravel.studentportal.model.Lesson
 import ru.ravel.studentportal.service.LessonService
 import ru.ravel.studentportal.service.StudentService
 import ru.ravel.studentportal.service.SubjectService
@@ -90,6 +89,14 @@ class ApiController(
 	@GetMapping("/lessons")
 	fun getLessons(): ResponseEntity<Any> {
 		return ResponseEntity.ok().body(lessonService.getLessons())
+	}
+
+
+	@GetMapping("/lessons-by-group")
+	fun getLessonsByGroup(
+		@RequestBody groupId: GroupId
+	): ResponseEntity<Any> {
+		return ResponseEntity.ok().body(lessonService.getLessonsByGroup(groupId))
 	}
 
 }

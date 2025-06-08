@@ -1,6 +1,7 @@
 package ru.ravel.studentportal.service
 
 import org.springframework.stereotype.Service
+import ru.ravel.studentportal.dto.GroupId
 import ru.ravel.studentportal.dto.LessonDto
 import ru.ravel.studentportal.model.Lesson
 import ru.ravel.studentportal.repository.GroupRepository
@@ -28,6 +29,11 @@ class LessonService(
 
 	fun getLessons(): List<Lesson> {
 		return lessonRepository.findAll()
+	}
+
+	fun getLessonsByGroup(groupId: GroupId): List<Lesson> {
+		return lessonRepository.findAll()
+			.filter { it.group?.id == groupId.id }
 	}
 
 }
