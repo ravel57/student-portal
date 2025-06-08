@@ -2,12 +2,10 @@ package ru.ravel.studentportal.service
 
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
-import ru.ravel.studentportal.dto.GroupId
-import ru.ravel.studentportal.dto.MarkEntry
-import ru.ravel.studentportal.dto.MarksBySubject
-import ru.ravel.studentportal.dto.StudentsMarksBySubjects
+import ru.ravel.studentportal.dto.*
 import ru.ravel.studentportal.model.*
 import ru.ravel.studentportal.repository.GroupRepository
+import ru.ravel.studentportal.repository.LessonRepository
 import ru.ravel.studentportal.repository.SubjectRepository
 import ru.ravel.studentportal.repository.UserRepository
 import java.time.LocalDate
@@ -19,6 +17,7 @@ class StudentService(
 	private val userRepository: UserRepository,
 	private val subjectRepository: SubjectRepository,
 	private val groupRepository: GroupRepository,
+	private val lessonRepository: LessonRepository,
 ) {
 
 	fun getGroups(authentication: Authentication): List<StudentGroup> {
@@ -74,9 +73,24 @@ class StudentService(
 
 	fun getStudentsMarksBySubjects(studentId: Long): StudentsMarksBySubjects? {
 		val student = userRepository.findById(studentId).orElseThrow()
+		val lessons = lessonRepository.findAll().filter { it.group == student.group }
 		val list = student.studentsMarks
 			.map { studentMark ->
-				MarksBySubject(studentMark.marks.sortedBy { it.date }, studentMark.subject!!)
+				val marks = lessons
+					.filter { it.subject == studentMark.subject }
+					.flatMap { lesson ->
+						studentMark.marks.map {
+							MarkDto(
+								lesson.date!!,
+								studentMark.marks.find { it.date == lesson.date }?.value
+							)
+						}
+					}
+				MarksBySubject(
+					marks = marks
+					/*studentMark.marks.sortedBy { it.date }*/,
+					subject = studentMark.subject!!
+				)
 			}
 		return StudentsMarksBySubjects(
 			student = student,
