@@ -35,6 +35,7 @@ class LessonService(
 		return lessonRepository.findAll()
 			.filter { it.group?.id == lessonBy.groupId }
 			.filter { it.group?.id == lessonBy.subjectId }
+			.sortedBy { it.date }
 	}
 
 }

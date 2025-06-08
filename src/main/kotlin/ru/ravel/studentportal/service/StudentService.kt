@@ -43,7 +43,7 @@ class StudentService(
 		val mark = Mark(
 			subject = subject,
 			value = markEntry.mark,
-			date = LocalDate.parse(markEntry.date, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+			date = LocalDate.parse(markEntry.date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 		)
 		if (studentMark != null) {
 			studentMark.marks.add(mark)
