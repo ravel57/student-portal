@@ -93,7 +93,7 @@ class ApiController(
 	}
 
 
-	@GetMapping("/lessons-by")
+	@PostMapping("/lessons-by")
 	fun getLessonsByGroup(
 		@RequestBody lessonBy: LessonBy
 	): ResponseEntity<Any> {

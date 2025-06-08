@@ -22,7 +22,7 @@ class LessonService(
 		val lesson = Lesson(
 			subject = subjectRepository.findById(lessonDto.subjectId).orElse(null),
 			group = groupRepository.findById(lessonDto.groupId).orElse(null),
-			date = LocalDate.parse(lessonDto.date, DateTimeFormatter.ofPattern("yyyy.MM.dd")),
+			date = LocalDate.parse(lessonDto.date, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
 		)
 		return lessonRepository.save(lesson)
 	}
