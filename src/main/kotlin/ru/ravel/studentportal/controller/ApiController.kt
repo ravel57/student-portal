@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import ru.ravel.studentportal.dto.GroupId
+import ru.ravel.studentportal.dto.LessonBy
 import ru.ravel.studentportal.dto.LessonDto
 import ru.ravel.studentportal.dto.MarkEntry
 import ru.ravel.studentportal.service.LessonService
@@ -92,11 +93,11 @@ class ApiController(
 	}
 
 
-	@GetMapping("/lessons-by-group")
+	@GetMapping("/lessons-by")
 	fun getLessonsByGroup(
-		@RequestBody groupId: GroupId
+		@RequestBody lessonBy: LessonBy
 	): ResponseEntity<Any> {
-		return ResponseEntity.ok().body(lessonService.getLessonsByGroup(groupId))
+		return ResponseEntity.ok().body(lessonService.getLessonsBy(lessonBy))
 	}
 
 }
