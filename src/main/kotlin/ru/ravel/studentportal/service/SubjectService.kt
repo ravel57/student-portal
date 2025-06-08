@@ -15,8 +15,8 @@ class SubjectService(
 ) {
 
 	fun getSubjects(authentication: Authentication): List<Subject>? {
-		val teacher = userRepository.findByEmail(authentication.name)
-		val subjects = subjectRepository.findAll().filter { it.teacher == teacher || teacher?.role == Role.ADMIN }
+		val user = userRepository.findByEmail(authentication.name)
+		val subjects = subjectRepository.findAll().filter { it.teacher == user || user?.role == Role.ADMIN }
 		return subjects
 	}
 
