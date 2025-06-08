@@ -74,9 +74,10 @@ class StudentService(
 
 	fun getStudentsMarksBySubjects(studentId: Long): StudentsMarksBySubjects? {
 		val student = userRepository.findById(studentId).orElseThrow()
-		val list = student.studentsMarks.map { studentMark ->
-			MarksBySubject(studentMark.marks, studentMark.subject!!)
-		}
+		val list = student.studentsMarks
+			.map { studentMark ->
+				MarksBySubject(studentMark.marks.sortedBy { it.date }, studentMark.subject!!)
+			}
 		return StudentsMarksBySubjects(
 			student = student,
 			marksBySubject = list
