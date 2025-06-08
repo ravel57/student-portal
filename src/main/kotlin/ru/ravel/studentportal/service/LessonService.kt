@@ -6,6 +6,8 @@ import ru.ravel.studentportal.model.Lesson
 import ru.ravel.studentportal.repository.GroupRepository
 import ru.ravel.studentportal.repository.LessonRepository
 import ru.ravel.studentportal.repository.SubjectRepository
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 @Service
@@ -19,9 +21,13 @@ class LessonService(
 		val lesson = Lesson(
 			subject = subjectRepository.findById(lessonDto.subjectId).orElse(null),
 			group = groupRepository.findById(lessonDto.groupId).orElse(null),
-			date = lessonDto.date,
+			date = LocalDate.parse(lessonDto.date, DateTimeFormatter.ofPattern("dd.MM.yyyy")),
 		)
 		return lessonRepository.save(lesson)
+	}
+
+	fun getLessons(): List<Lesson> {
+		return lessonRepository.findAll()
 	}
 
 }

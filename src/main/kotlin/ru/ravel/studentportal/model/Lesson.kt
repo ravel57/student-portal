@@ -1,7 +1,7 @@
 package ru.ravel.studentportal.model
 
 import jakarta.persistence.*
-import java.time.ZonedDateTime
+import java.time.LocalDate
 
 
 @Entity
@@ -17,5 +17,5 @@ data class Lesson(
 	@ManyToOne(fetch = FetchType.EAGER)
 	var group: StudentGroup? = null,
 
-	var date: ZonedDateTime? = null,
+	var date: LocalDate? = null,
 )

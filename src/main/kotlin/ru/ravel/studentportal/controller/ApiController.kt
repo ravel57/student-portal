@@ -78,12 +78,18 @@ class ApiController(
 	}
 
 
-	@PostMapping("/new-lesson")
-	fun newLesson(
+	@PostMapping("/lesson")
+	fun createLesson(
 		authentication: Authentication,
 		@RequestBody lesson: LessonDto
 	): ResponseEntity<Any> {
 		return ResponseEntity.ok().body(lessonService.createLesson(lesson))
+	}
+
+
+	@GetMapping("/lessons")
+	fun getLessons(): ResponseEntity<Any> {
+		return ResponseEntity.ok().body(lessonService.getLessons())
 	}
 
 }
