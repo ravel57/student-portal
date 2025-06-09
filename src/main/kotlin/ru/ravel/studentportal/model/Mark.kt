@@ -12,9 +12,6 @@ data class Mark(
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	var id: Long? = null,
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
-	var subject: Subject? = null,
-
 	var value: Int? = null,
 
 	var date: LocalDate? = null,

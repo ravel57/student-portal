@@ -1,13 +1,11 @@
 package ru.ravel.studentportal.service
 
+import jakarta.transaction.Transactional
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import ru.ravel.studentportal.dto.*
 import ru.ravel.studentportal.model.*
-import ru.ravel.studentportal.repository.GroupRepository
-import ru.ravel.studentportal.repository.LessonRepository
-import ru.ravel.studentportal.repository.SubjectRepository
-import ru.ravel.studentportal.repository.UserRepository
+import ru.ravel.studentportal.repository.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -18,6 +16,7 @@ class StudentService(
 	private val subjectRepository: SubjectRepository,
 	private val groupRepository: GroupRepository,
 	private val lessonRepository: LessonRepository,
+	private val studentsMarksRepository: StudentsMarksRepository,
 ) {
 
 	fun getGroups(authentication: Authentication): List<StudentGroup> {
@@ -37,27 +36,32 @@ class StudentService(
 	}
 
 
+	@Transactional
 	fun updateMark(markEntry: MarkEntry): User? {
 		val student = userRepository.findById(markEntry.studentId).orElseThrow()
 		val subject = subjectRepository.findById(markEntry.subjectId).orElseThrow()
-		var studentMark = student?.studentsMarks?.find { it.subject?.name == subject?.name }
-		val mark = Mark(
-			subject = subject,
-			value = markEntry.mark,
-			date = LocalDate.parse(markEntry.date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-		)
-		if (studentMark != null) {
-			studentMark.marks.add(mark)
-		} else {
-			studentMark = StudentsMarks(
+		val markDate = LocalDate.parse(markEntry.date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+		var studentsMarks = student.studentsMarks.find { it.subject?.id == subject.id }
+		if (studentsMarks == null) {
+			studentsMarks = StudentsMarks(
 				student = student,
 				subject = subject,
-				marks = mutableListOf(mark),
+				marks = mutableListOf()
 			)
-			student?.studentsMarks = mutableListOf(studentMark)
+			student.studentsMarks.add(studentsMarks)
 		}
-		student?.let { userRepository.save(it) }
-		return student
+		val existingMark = studentsMarks.marks.find { it.date == markDate }
+		if (existingMark != null) {
+			existingMark.value = markEntry.mark
+		} else {
+			val newMark = Mark(
+				value = markEntry.mark,
+				date = markDate
+			)
+			studentsMarks.marks.add(newMark)
+		}
+		userRepository.save(student)
+		return userRepository.findById(student.id!!).orElseThrow()
 	}
 
 

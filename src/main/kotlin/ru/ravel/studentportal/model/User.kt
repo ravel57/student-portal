@@ -33,8 +33,7 @@ class User(
 	@JsonBackReference("user-group")
 	var group: StudentGroup? = null,
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
-	@JoinColumn(name = "user_id")
+	@OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL], mappedBy = "student")
 	@JsonManagedReference("student-marks")
 	var studentsMarks: MutableList<StudentsMarks> = mutableListOf()
 ) : UserDetails, Serializable {

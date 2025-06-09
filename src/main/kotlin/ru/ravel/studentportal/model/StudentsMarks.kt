@@ -12,16 +12,19 @@ data class StudentsMarks(
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	var id: Long? = null,
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = [(CascadeType.ALL)])
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "student_id")
 	@JsonBackReference("student-marks")
 	var student: User? = null,
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = [(CascadeType.ALL)])
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "subject_id")
 	@JsonBackReference("subject-marks")
 	var subject: Subject? = null,
 
 	@OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
 	@JsonManagedReference("marks-list")
+	@JoinColumn(name = "students_marks_id")
 	var marks: MutableList<Mark> = mutableListOf()
 ) : Serializable {
 	companion object {
