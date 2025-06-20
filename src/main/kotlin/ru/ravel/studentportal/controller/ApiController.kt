@@ -3,13 +3,11 @@ package ru.ravel.studentportal.controller
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
-import ru.ravel.studentportal.dto.GroupId
-import ru.ravel.studentportal.dto.LessonBy
-import ru.ravel.studentportal.dto.LessonDto
-import ru.ravel.studentportal.dto.MarkEntry
+import ru.ravel.studentportal.dto.*
 import ru.ravel.studentportal.service.LessonService
 import ru.ravel.studentportal.service.StudentService
 import ru.ravel.studentportal.service.SubjectService
+import ru.ravel.studentportal.service.UserService
 
 
 @RestController
@@ -17,7 +15,8 @@ import ru.ravel.studentportal.service.SubjectService
 class ApiController(
 	private val studentService: StudentService,
 	private val subjectService: SubjectService,
-	private val lessonService: LessonService
+	private val lessonService: LessonService,
+	private val userService: UserService
 ) {
 
 	@GetMapping("/groups")
@@ -104,6 +103,14 @@ class ApiController(
 	@GetMapping("/students-marks-by-subjects")
 	fun getStudentsMarksBySubjects(@RequestParam studentId: Long): ResponseEntity<Any> {
 		return ResponseEntity.ok().body(studentService.getStudentsMarksBySubjects(studentId))
+	}
+
+
+	@PostMapping("/user")
+	fun createNewUser(
+		@RequestBody newUserDto: NewUserDto
+	): ResponseEntity<Any> {
+		return ResponseEntity.ok().body(userService.createNewUser(newUserDto))
 	}
 
 }
