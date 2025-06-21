@@ -1,6 +1,5 @@
 package ru.marchenko.studentportal.component
 
-
 import org.flywaydb.core.Flyway
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
